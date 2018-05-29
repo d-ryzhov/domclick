@@ -1,5 +1,6 @@
 package ru.domclick.dryzhov.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
  *
  * @author dryzhov
  */
+@Slf4j
 @Service
 @Transactional
 public class AccountService {
@@ -27,6 +29,8 @@ public class AccountService {
     }
 
     public void createAccount(String username, String account) {
+        log.info("Creating new account for user {}: {}", username, account);
+
         Client client = clientRepository.findOne(username);
         Assert.notNull(client, "Client has not been found");
 
@@ -36,6 +40,7 @@ public class AccountService {
     }
 
     public void deleteAccount(String username, String account) {
+        log.info("Deleting account for user {}: {}", username, account);
         accountRepository.deleteByClientUsernameAndAccount(username, account);
     }
 
@@ -47,6 +52,7 @@ public class AccountService {
     }
 
     public void deposit(String username, String account, BigDecimal money) {
+        log.info("Adding {} money to account {} of user {}", money, account, username);
         Account acnt = accountRepository.findByClientUsernameAndAccount(username, account);
         Assert.notNull(acnt, "Client or Account has not been found");
 
@@ -58,6 +64,7 @@ public class AccountService {
     }
 
     public void withdraw(String username, String account, BigDecimal money) {
+        log.info("Removing {} money from account {} of user {}", money, account, username);
         Account acnt = accountRepository.findByClientUsernameAndAccount(username, account);
         Assert.notNull(acnt, "Client or Account has not been found");
 
@@ -69,6 +76,7 @@ public class AccountService {
     }
 
     public void transfer(String usernameFrom, String accountFrom, String usernameTo, String accountTo, BigDecimal money) {
+        log.info("Transferring {} money from account {} of user {} to account {} of user {}", money, accountFrom, usernameFrom, accountTo, usernameTo);
         //H2 locks for update entire table but this is for common case
         Account acntFrom, acntTo;
         Assert.isTrue(!accountFrom.equals(accountTo), "Source and target accounts must be different");

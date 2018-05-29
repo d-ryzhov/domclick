@@ -1,5 +1,6 @@
 package ru.domclick.dryzhov.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.domclick.dryzhov.domain.Client;
@@ -10,6 +11,7 @@ import ru.domclick.dryzhov.repository.ClientRepository;
  *
  * @author dryzhov
  */
+@Slf4j
 @Service
 @Transactional
 public class ClientService {
@@ -20,11 +22,13 @@ public class ClientService {
     }
 
     public void createClient(String username) {
+        log.info("Creating new client {}", username);
         Client client = new Client(username);
         clientRepository.save(client);
     }
 
     public void deleteClient(String username) {
+        log.info("Deleting client {}", username);
         clientRepository.delete(username);
     }
 }
