@@ -1,0 +1,152 @@
+{
+  "info": {
+    "_postman_id": "93af9c03-6f5d-4341-8fec-49135f9bf9fb",
+    "name": "DomClick",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Deposit",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"username\": \"client3\",\n\t\"account\": \"003\",\n\t\"money\": 300.0\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/account/deposit",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "account",
+            "deposit"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Withdraw",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"username\": \"client3\",\n\t\"account\": \"003\",\n\t\"money\": 50.0\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/account/withdraw",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "account",
+            "withdraw"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Transfer",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"usernameFrom\": \"client3\",\n\t\"accountFrom\": \"003\",\n\t\"usernameTo\": \"client1\",\n\t\"accountTo\": \"001\",\n\t\"money\": 5.0\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/account/transfer",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "account",
+            "transfer"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GetState",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"username\": \"client3\",\n\t\"account\": \"003\",\n\t\"money\": 300.0\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/client/client1/002",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "client",
+            "client1",
+            "002"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "AddClient",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {},
+        "url": {
+          "raw": "http://localhost:8080/client/client4",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "client",
+            "client4"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
