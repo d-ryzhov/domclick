@@ -2,6 +2,7 @@ package ru.domclick.dryzhov;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +16,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.NestedServletException;
 import ru.domclick.dryzhov.service.AccountService;
-import ru.domclick.dryzhov.service.ClientService;
 import ru.domclick.dryzhov.web.controller.dto.Transfer;
 
 import java.math.BigDecimal;
@@ -43,28 +43,26 @@ public class AccountServiceTest {
     @Autowired
     private AccountService accountService;
     @Autowired
-    private ClientService clientService;
-    @Autowired
     private ThreadPoolTaskExecutor testExecutor;
 
     private CountDownLatch latch;
 
     @Before
     public void setUp() {
-        createClient(0, 100);
-        createClient(1, 200);
-        createClient(2, 300);
+        //clients are created via import.sql now
+        initClient(0, 100);
+        initClient(1, 200);
+        initClient(2, 300);
     }
 
-    private void createClient(int i, long money) {
-        clientService.createClient(CLIENTS[i]);
-        accountService.createAccount(CLIENTS[i], ACCOUNTS[i]);
+    private void initClient(int i, long money) {
         accountService.deposit(CLIENTS[i], ACCOUNTS[i], BigDecimal.valueOf(money));
     }
 
     @Test
     public void shuffleMoney() throws InterruptedException {
-        log.info("Initial money on all accounts: {}", getAllAccountMoney());
+        BigDecimal moneyBegin = getAllAccountMoney();
+        log.info("Initial money on all accounts: {}", moneyBegin);
         latch = new CountDownLatch(N);
 
         for (int i = 0; i < N; i++) {
@@ -72,7 +70,9 @@ public class AccountServiceTest {
         }
         latch.await();
 
-        log.info("Final money on all accounts: {}", getAllAccountMoney());
+        BigDecimal moneyEnd = getAllAccountMoney();
+        log.info("Final money on all accounts: {}", moneyEnd);
+        Assert.assertEquals(moneyBegin, moneyEnd);
     }
 
     private BigDecimal getAllAccountMoney() {
