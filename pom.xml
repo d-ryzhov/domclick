@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.domclick</groupId>
-    <artifactId>dryzhov-task</artifactId>
+    <artifactId>domclick-dryzhov-task</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <name>DomClick's task</name>
@@ -22,7 +22,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <hibernate.version>5.3.1.Final</hibernate.version>
-        <hsqldb.version>2.4.1</hsqldb.version>
     </properties>
 
     <dependencies>
