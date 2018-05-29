@@ -1,4 +1,4 @@
-package dryzhov.domclick.domain;
+package ru.domclick.dryzhov.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

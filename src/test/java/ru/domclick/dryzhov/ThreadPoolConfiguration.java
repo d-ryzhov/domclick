@@ -1,4 +1,4 @@
-package dryzhov.domclick;
+package ru.domclick.dryzhov;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

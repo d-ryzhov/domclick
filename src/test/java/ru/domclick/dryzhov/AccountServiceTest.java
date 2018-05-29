@@ -1,7 +1,6 @@
-package dryzhov.domclick;
+package ru.domclick.dryzhov;
 
-import dryzhov.domclick.service.AccountService;
-import dryzhov.domclick.service.ClientService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.util.NestedServletException;
+import ru.domclick.dryzhov.service.AccountService;
+import ru.domclick.dryzhov.service.ClientService;
+import ru.domclick.dryzhov.web.controller.dto.Transfer;
 
 import java.math.BigDecimal;
 import java.util.concurrent.CountDownLatch;
@@ -28,12 +30,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @RunWith(SpringRunner.class)
 @Import(ThreadPoolConfiguration.class)
 public class AccountServiceTest {
-    private static final int N = 2;
+    private static final int N = 1000;
     private static final int ACCOUNTS_N = 3;
 
     private static final String CLIENTS[] = {"client1", "client2", "client3"};
     private static final String ACCOUNTS[] = {"001", "002", "003"};
 
+    @Autowired
+    private ObjectMapper objectMapper;
     @Autowired
     protected MockMvc mockMvc;
     @Autowired
@@ -95,12 +99,15 @@ public class AccountServiceTest {
     private void transferMoney(String usernameFrom, String accountFrom, String usernameTo, String accountTo, BigDecimal money) {
         log.info("Transfer {} money from account {} to {}", money, accountFrom, accountTo);
         try {
-            ResultActions result = mockMvc.perform(post("/account/transfer")
+            String json = objectMapper.writeValueAsString(new Transfer(usernameFrom, accountFrom, usernameTo, accountTo, money));
+            mockMvc.perform(post("/account/transfer")
                     .param("usernameFrom", usernameFrom)
                     .param("accountFrom", accountFrom)
                     .param("usernameTo", usernameTo)
                     .param("accountTo", accountTo)
                     .param("money", money.toString())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(json)
             );
 
             viewAccountState();
@@ -112,7 +119,7 @@ public class AccountServiceTest {
     }
 
     private void viewAccountState() {
-        StringBuilder sb = new StringBuilder('|');
+        StringBuilder sb = new StringBuilder("|");
         for (int i = 0; i < ACCOUNTS_N; i++) {
             BigDecimal accountMoney = accountService.getAccountMoney(CLIENTS[i], ACCOUNTS[i]);
             sb.append(accountMoney).append('|');

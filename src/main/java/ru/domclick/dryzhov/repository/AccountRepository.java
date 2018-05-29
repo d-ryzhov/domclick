@@ -1,8 +1,8 @@
-package dryzhov.domclick.repository;
+package ru.domclick.dryzhov.repository;
 
-import dryzhov.domclick.domain.Account;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.repository.CrudRepository;
+import ru.domclick.dryzhov.domain.Account;
 
 import javax.persistence.LockModeType;
 

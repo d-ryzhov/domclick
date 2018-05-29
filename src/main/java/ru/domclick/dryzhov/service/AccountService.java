@@ -1,12 +1,12 @@
-package dryzhov.domclick.service;
+package ru.domclick.dryzhov.service;
 
-import dryzhov.domclick.domain.Account;
-import dryzhov.domclick.domain.Client;
-import dryzhov.domclick.repository.AccountRepository;
-import dryzhov.domclick.repository.ClientRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import ru.domclick.dryzhov.domain.Account;
+import ru.domclick.dryzhov.domain.Client;
+import ru.domclick.dryzhov.repository.AccountRepository;
+import ru.domclick.dryzhov.repository.ClientRepository;
 
 import java.math.BigDecimal;
 
@@ -69,8 +69,16 @@ public class AccountService {
     }
 
     public void transfer(String usernameFrom, String accountFrom, String usernameTo, String accountTo, BigDecimal money) {
-        Account acntFrom = accountRepository.findByClientUsernameAndAccount(usernameFrom, accountFrom);
-        Account acntTo = accountRepository.findByClientUsernameAndAccount(usernameTo, accountTo);
+        //H2 locks for update entire table but this is for common case
+        Account acntFrom, acntTo;
+        Assert.isTrue(!accountFrom.equals(accountTo), "Source and target accounts must be different");
+        if (accountTo.compareTo(accountFrom) > 0) {
+            acntFrom = accountRepository.findByClientUsernameAndAccount(usernameFrom, accountFrom);
+            acntTo = accountRepository.findByClientUsernameAndAccount(usernameTo, accountTo);
+        } else {
+            acntTo = accountRepository.findByClientUsernameAndAccount(usernameTo, accountTo);
+            acntFrom = accountRepository.findByClientUsernameAndAccount(usernameFrom, accountFrom);
+        }
         Assert.notNull(acntFrom, "Source Client or Account has not been found");
         Assert.notNull(acntTo, "Target Client or Account has not been found");
 
